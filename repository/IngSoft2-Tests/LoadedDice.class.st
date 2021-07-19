@@ -13,6 +13,14 @@ LoadedDice class >> withValues: values [
 	^self new initializeWithValues: values.
 ]
 
+{ #category : #'as yet unclassified' }
+LoadedDice >> getMaxValue [
+	| copia |
+	copia:= self values.
+	copia sort.
+	^ copia last.
+]
+
 { #category : #initialization }
 LoadedDice >> initializeWithValues: aGroupOfValues [.
 	nextValue:=1.
@@ -26,4 +34,9 @@ LoadedDice >> roll [
 	nextValue:=(nextValue rem: values size) +1.
 	^number.
 	
+]
+
+{ #category : #initialization }
+LoadedDice >> values [ 
+	^ values copy.
 ]

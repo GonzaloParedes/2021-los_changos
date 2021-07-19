@@ -38,6 +38,167 @@ LudoMagicGameTest >> setUp [
 
 ]
 
+{ #category : #'card usage tests' }
+LudoMagicGameTest >> test01JorgeGetsToJail [
+	| aGame squares aSpeedCard |
+	aSpeedCard := SpeedCard new.
+	squares := {EffectlessSquare new. EffectlessSquare new. JailSquare new. EffectlessSquare new. EffectlessSquare new}.
+	aGame := LudoMagicGame
+		playedBy: players
+		withNumberOfLaps: 4
+		throwing:
+			{(LoadedDice withValues: #(1 2 3)).
+			(LoadedDice withValues: #(1 2 4))}
+		andWithBoardOfSquares: squares
+		withDeckOf: (LoadedDeck withCards: {aSpeedCard}).
+	aGame turn.
+
+	self assert: (aGame numberOfSquareOf: jorge) equals: 3.
+]
+
+{ #category : #'card usage tests' }
+LudoMagicGameTest >> test02JorgeGetsToJailAndAfterHeGetsMaxValueOfDicesGetsOut [
+	| aGame squares aSpeedCard |
+	aSpeedCard := SpeedCard new.
+	squares := {EffectlessSquare new. EffectlessSquare new. JailSquare new. EffectlessSquare new. EffectlessSquare new}.
+	aGame := LudoMagicGame
+		playedBy: players
+		withNumberOfLaps: 4
+		throwing:
+			{(LoadedDice withValues: #(1 2 3)).
+			(LoadedDice withValues: #(1 2 4))}
+		andWithBoardOfSquares: squares
+		withDeckOf: (LoadedDeck withCards: {aSpeedCard}).
+	aGame turn.
+	aGame turn.
+	aGame turn.
+	self assert: (aGame numberOfSquareOf: jorge) equals: 5.
+]
+
+{ #category : #'card usage tests' }
+LudoMagicGameTest >> test03JorgeGetsToJailAndWhileHeIsInThereHeCannotMove [
+	| aGame squares aSpeedCard |
+	aSpeedCard := SpeedCard new.
+	squares := {EffectlessSquare new. EffectlessSquare new. JailSquare new. EffectlessSquare new. EffectlessSquare new}.
+	aGame := LudoMagicGame
+		playedBy: players
+		withNumberOfLaps: 4
+		throwing:
+			{(LoadedDice withValues: #(1 2 )).
+			(LoadedDice withValues: #(1 2 ))}
+		andWithBoardOfSquares: squares
+		withDeckOf: (LoadedDeck withCards: {aSpeedCard}).
+	aGame turn.
+	aGame turn.
+	aGame turn.
+	aGame turn.
+	aGame turn.
+	self assert: (aGame numberOfSquareOf: jorge) equals: 3.
+]
+
+{ #category : #'card usage tests' }
+LudoMagicGameTest >> test04JorgeGetsAFreedomCardAndThrowsItAfterHeGetsInJail [
+	| aGame squares aFreedomCard |
+	aFreedomCard  := FreedomCard new.
+	squares := {EffectlessSquare new. JailSquare new. DeliveryCardSquare new. EffectlessSquare new. EffectlessSquare new}.
+	aGame := LudoMagicGame
+		playedBy: players
+		withNumberOfLaps: 4
+		throwing:
+			{(LoadedDice withValues: #(1 2 2 3)).
+			(LoadedDice withValues: #(1 2 2 1))}
+		andWithBoardOfSquares: squares
+		withDeckOf: (LoadedDeck withCards: {aFreedomCard}).
+	aGame turn.
+	aGame turn.
+	aGame turn.
+	aGame affect:jorge using: aFreedomCard by: jorge.
+	aGame turn.
+	aGame turn.
+	self assert: (aGame numberOfSquareOf: jorge) equals: 4.
+]
+
+{ #category : #'card usage tests' }
+LudoMagicGameTest >> test05BothPlayersGetToJailAndGetOutByDifferentMethods [
+	| aGame squares aFreedomCard |
+	aFreedomCard  := FreedomCard new.
+	squares := {EffectlessSquare new. JailSquare new. DeliveryCardSquare new. EffectlessSquare new. EffectlessSquare new}.
+	aGame := LudoMagicGame
+		playedBy: players
+		withNumberOfLaps: 4
+		throwing:
+			{(LoadedDice withValues: #(1 3 2 3)).
+			(LoadedDice withValues: #(1 3 2 5))}
+		andWithBoardOfSquares: squares
+		withDeckOf: (LoadedDeck withCards: {aFreedomCard}).
+	aGame turn.
+	aGame turn.
+	aGame turn.
+	aGame affect:jorge using: aFreedomCard by: jorge.
+	aGame turn.
+	aGame turn.
+	self assert: (aGame numberOfSquareOf: jorge) equals: 4.
+	self assert: (aGame numberOfSquareOf: julian) equals: 5.
+]
+
+{ #category : #'card usage tests' }
+LudoMagicGameTest >> test06JulianGetsAReDoCardAfterJorgeThrewAFreedomCardAndPlaysIt [
+	| aGame squares aReDoCard aFreedomCard |
+	aReDoCard := ReDoCard new.
+	aFreedomCard := FreedomCard new.
+	squares := {EffectlessSquare new. EffectlessSquare new. JailSquare new. EffectlessSquare new. EffectlessSquare new}.
+	aGame := LudoMagicGame
+		playedBy: players
+		withNumberOfLaps: 4
+		throwing:
+			{(LoadedDice withValues: #(1 3)).
+			(LoadedDice withValues: #(1 4))}
+		andWithBoardOfSquares: squares
+		withDeckOf:
+			(LoadedDeck
+				withCards:
+					{aFreedomCard.
+					aReDoCard}).
+	aGame turn.
+	aGame affect:jorge  using:aFreedomCard by:jorge.
+	aGame turn. 
+	aGame affect: julian using: aReDoCard by: julian.
+
+	self assert: (aGame numberOfSquareOf: julian) equals: 3.
+	self assert: (aGame numberOfSquareOf: jorge) equals: 3.
+]
+
+{ #category : #'card usage tests' }
+LudoMagicGameTest >> test07JulianGetsARepeatCardAfterJorgeFallsInJailSquareAndPlaysIt [
+	| aGame squares aRepeatCard aFreedomCard |
+	aRepeatCard := RepeatCard  new.
+	aFreedomCard := FreedomCard new.
+	squares := {EffectlessSquare new. JailSquare new. DeliveryCardSquare new. EffectlessSquare new. EffectlessSquare new}.
+	aGame := LudoMagicGame
+		playedBy: players
+		withNumberOfLaps: 4
+		throwing:
+			{(LoadedDice withValues: #(1 4 2)).
+			(LoadedDice withValues: #(1 4 2))}
+		andWithBoardOfSquares: squares
+		withDeckOf:
+			(LoadedDeck
+				withCards:
+					{aFreedomCard.
+					aRepeatCard}).
+	
+	aGame turn.
+	aGame turn.
+	aGame turn.
+	aGame affect: jorge using: aFreedomCard by: jorge.
+	aGame affect: jorge using: aRepeatCard by: julian.
+	aGame turn.
+	aGame affect: jorge using: aFreedomCard by: jorge.
+
+	self assert: (aGame numberOfSquareOf: julian) equals: 1.
+	self assert: (aGame numberOfSquareOf: jorge) equals: 2.
+]
+
 { #category : #'exception tests' }
 LudoMagicGameTest >> testAGameCannotHaveAWinnerIfItIsNotFinished [
 
@@ -114,7 +275,10 @@ LudoMagicGameTest >> testAGameRollsTheDiceForThePlayersTwiceAndIsFinishedWithEno
 
 	anOneLapGame := LudoMagicGame playedBy:players  withNumberOfLaps:1  throwing:someDices   andWithBoardOfSquares:(OrderedCollection new:10 withAll: EffectlessSquare new) withDeckOf: aDeck. 
 	
-	self do: 3 theGame: anOneLapGame .
+	anOneLapGame turn.
+	anOneLapGame turn.
+	anOneLapGame turn.
+	
 	
 
 	self assert: anOneLapGame finished

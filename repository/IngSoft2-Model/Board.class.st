@@ -9,7 +9,8 @@ Class {
 		'cardHandlers',
 		'deck',
 		'lastCardPlayed',
-		'lastSquarePlayed'
+		'lastSquarePlayed',
+		'jail'
 	],
 	#category : #'IngSoft2-Model-Core'
 }
@@ -77,6 +78,12 @@ Board >> addToAllEffectOf: aCard [
 	
 ]
 
+{ #category : #'as yet unclassified' }
+Board >> applyEffectOfReleasingFromJail: aPlayer [ 
+	lastCardPlayed := FreedomCard new.
+	self releaseFromJail: aPlayer.
+]
+
 { #category : #action }
 Board >> applyEffectOfTheLastPlayedSquareTo: aPlayer from: aCard [
 	lastSquarePlayed makeEffectOn: aPlayer thatHasItsPositionIn: self.
@@ -131,8 +138,14 @@ Board >> initializePlayedBy: aGroupOfPlayers withNumberOf: numberOfLaps with: aG
 	laps := numberOfLaps.
 	players := aGroupOfPlayers.
 	deck := aDeck.
+	jail:= OrderedCollection new.
 	lastCardPlayed := nil.
 	lastSquarePlayed := EffectlessSquare new.
+]
+
+{ #category : #'as yet unclassified' }
+Board >> isInJail: aPlayer [ 
+	^(jail includes: aPlayer)
 ]
 
 { #category : #accessing }
@@ -216,6 +229,11 @@ Board >> positionOf: aPlayer [
 	^ positions detect: [ :aPosition | aPosition player = aPlayer  ]
 ]
 
+{ #category : #'as yet unclassified' }
+Board >> releaseFromJail: aPlayer [
+	jail remove: aPlayer.
+]
+
 { #category : #action }
 Board >> removeFromHand: aCard to: aPlayer [
 	(self cardHandlerOf: aPlayer) removeFromHand: aCard.
@@ -238,6 +256,11 @@ Board >> restartPositionOfAllPlayers [
 	positions := players
 		collect:
 			[ :player | Position of: player at: 1 after: (self lapOf: player) ]
+]
+
+{ #category : #'as yet unclassified' }
+Board >> sendToJail: aPlayer [ 
+	jail add: aPlayer.
 ]
 
 { #category : #accessing }

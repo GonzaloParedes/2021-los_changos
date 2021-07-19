@@ -6,7 +6,8 @@ Class {
 		'finished',
 		'board',
 		'turnPlayer',
-		'nextPlayerIndex'
+		'nextPlayerIndex',
+		'maxDiceValue'
 	],
 	#category : #'IngSoft2-Model-Core'
 }
@@ -93,6 +94,11 @@ LudoMagicGame >> affect: aTarget using: aCard by: aPlayer [
 	
 ]
 
+{ #category : #'as yet unclassified' }
+LudoMagicGame >> applyEffectOfReleasingFromJail: aPlayer [ 
+	board applyEffectOfReleasingFromJail: aPlayer.
+]
+
 { #category : #action }
 LudoMagicGame >> applyEffectOfTheLastPlayedSquareTo: aPlayer from:aCard [
 	board applyEffectOfTheLastPlayedSquareTo: aPlayer from:aCard.
@@ -102,6 +108,12 @@ LudoMagicGame >> applyEffectOfTheLastPlayedSquareTo: aPlayer from:aCard [
 { #category : #accessing }
 LudoMagicGame >> finished [
 	^ finished.
+]
+
+{ #category : #'as yet unclassified' }
+LudoMagicGame >> getOutOfJail: aPlayer [
+	self releaseFromJail: aPlayer.
+	^ maxDiceValue.
 ]
 
 { #category : #boolean }
@@ -115,6 +127,7 @@ LudoMagicGame >> initializePlayedBy: players withNumberOf: laps throwing: aGroup
 	nextPlayerIndex := 2.
 	finished := false.
 	dices := aGroupOfDices.
+	maxDiceValue:= (aGroupOfDices collect:[:dice | dice getMaxValue])sum.
 	turnPlayer := players at: 1.
 	board := Board
 		playedBy: players
@@ -145,15 +158,23 @@ LudoMagicGame >> numberOfSquareOf: aPlayer [
 
 { #category : #accessing }
 LudoMagicGame >> numberOfSquaresToMove [
-	| finalResult |
+	| finalResult finalResultWithEffects |
 	finalResult := self throwDices.
-	finalResult := finalResult + (board cardHandlerOf: turnPlayer) totalEffectsOnPlayer.
-	^ finalResult
+	finalResultWithEffects := finalResult + (board cardHandlerOf: turnPlayer) totalEffectsOnPlayer.
+	(board isInJail: turnPlayer)
+		ifTrue: [ ^ self validateIfRollIsTheMaximumValue: finalResult]
+			"Duda si sale con efectos o solo valor de tirada" 
+		ifFalse: [ ^ finalResultWithEffects ]
 ]
 
 { #category : #accessing }
 LudoMagicGame >> quantityOfCardInHandOf: aPlayer [
 	^ (board cardHandlerOf: aPlayer) quantityOfCardsInHand
+]
+
+{ #category : #'as yet unclassified' }
+LudoMagicGame >> releaseFromJail: aPlayer [ 
+	board releaseFromJail: aPlayer.
 ]
 
 { #category : #action }
@@ -191,6 +212,14 @@ LudoMagicGame >> validate: aPlayer has: aCard [.
 	(self has: aPlayer the: aCard)
         ifFalse: [ self
                 error: self class cardNotInHandErrorMessage ].
+]
+
+{ #category : #accessing }
+LudoMagicGame >> validateIfRollIsTheMaximumValue: finalResult [
+	finalResult = maxDiceValue
+		ifTrue: [^(self getOutOfJail: turnPlayer)]"me falta retornar el final result"
+		ifFalse: [^0]
+	"Duda si sale con efectos o solo valor de tirada"
 ]
 
 { #category : #validation }

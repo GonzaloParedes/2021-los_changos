@@ -6,5 +6,5 @@ Class {
 
 { #category : #action }
 Square >> makeEffectOn: aPlayer thatHasItsPositionIn: board [
-	self subclassResponsibility.
+	self subclassResponsibility .
 ]
