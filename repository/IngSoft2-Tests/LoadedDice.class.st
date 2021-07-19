@@ -15,10 +15,10 @@ LoadedDice class >> withValues: values [
 
 { #category : #'as yet unclassified' }
 LoadedDice >> getMaxValue [
-	| copia |
-	copia:= self values.
-	copia sort.
-	^ copia last.
+	| copyValues |
+	copyValues:= self values.
+	copyValues sort.
+	^ copyValues last.
 ]
 
 { #category : #initialization }

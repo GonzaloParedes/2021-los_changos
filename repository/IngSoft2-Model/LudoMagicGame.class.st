@@ -110,12 +110,6 @@ LudoMagicGame >> finished [
 	^ finished.
 ]
 
-{ #category : #'as yet unclassified' }
-LudoMagicGame >> getOutOfJail: aPlayer [
-	self releaseFromJail: aPlayer.
-	^ maxDiceValue.
-]
-
 { #category : #boolean }
 LudoMagicGame >> has: aPlayer the: aCard [ 
 	^ board has: aPlayer the: aCard
@@ -175,6 +169,7 @@ LudoMagicGame >> quantityOfCardInHandOf: aPlayer [
 { #category : #'as yet unclassified' }
 LudoMagicGame >> releaseFromJail: aPlayer [ 
 	board releaseFromJail: aPlayer.
+	^ maxDiceValue .
 ]
 
 { #category : #action }
@@ -217,9 +212,9 @@ LudoMagicGame >> validate: aPlayer has: aCard [.
 { #category : #accessing }
 LudoMagicGame >> validateIfRollIsTheMaximumValue: finalResult [
 	finalResult = maxDiceValue
-		ifTrue: [^(self getOutOfJail: turnPlayer)]"me falta retornar el final result"
+		ifTrue: [^(self releaseFromJail: turnPlayer)]
 		ifFalse: [^0]
-	"Duda si sale con efectos o solo valor de tirada"
+	
 ]
 
 { #category : #validation }

@@ -17,6 +17,6 @@ ReDoCard >> applyTo: aTarget in: aGame from: aPlayer [
 { #category : #action }
 ReDoCard >> validateIfIsPossibleToPlayReDoCardAt: aGame [
 	aGame lastCardPlayed isNil
-		ifTrue: [ self
+	ifTrue: [ self
 				error: 'This card cannot be played because there was no card played before' ]
 ]

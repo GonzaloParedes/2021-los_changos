@@ -199,6 +199,32 @@ LudoMagicGameTest >> test07JulianGetsARepeatCardAfterJorgeFallsInJailSquareAndPl
 	self assert: (aGame numberOfSquareOf: jorge) equals: 2.
 ]
 
+{ #category : #'card usage tests' }
+LudoMagicGameTest >> test08CannotThrowAFreedomCardToAPlayerIfHeIsNotInJail [
+	| aGame squares aFreedomCard |
+	aFreedomCard := FreedomCard new.
+	squares := {EffectlessSquare new. JailSquare new. DeliveryCardSquare new. EffectlessSquare new. EffectlessSquare new}.
+	aGame := LudoMagicGame
+		playedBy: players
+		withNumberOfLaps: 4
+		throwing:
+			{(LoadedDice withValues: #(4 2)).
+			(LoadedDice withValues: #(4 2))}
+		andWithBoardOfSquares: squares
+		withDeckOf:
+			(LoadedDeck
+				withCards:
+					{aFreedomCard.}).
+	
+	aGame turn.
+	aGame turn.
+	self
+	should: [aGame affect: jorge using: aFreedomCard by: jorge.] 
+	raise: Error
+	withExceptionDo: [ :error | self assert: error messageText equals: Board playerNotInJailErrorMessage ].
+	
+]
+
 { #category : #'exception tests' }
 LudoMagicGameTest >> testAGameCannotHaveAWinnerIfItIsNotFinished [
 

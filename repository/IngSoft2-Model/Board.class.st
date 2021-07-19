@@ -36,6 +36,11 @@ Board class >> playedBy: players with: squares andCardsFrom: deck finishingAfter
 	^self new initializePlayedBy: players withNumberOf: laps with: squares andCardsFrom: deck.
 ]
 
+{ #category : #'as yet unclassified' }
+Board class >> playerNotInJailErrorMessage [
+	^ 'The player is not in jail'
+]
+
 { #category : #'instance creation' }
 Board class >> validate: players withNumberOf: laps andWith: squares [
 	self validatePlayers: players.
@@ -80,8 +85,10 @@ Board >> addToAllEffectOf: aCard [
 
 { #category : #'as yet unclassified' }
 Board >> applyEffectOfReleasingFromJail: aPlayer [ 
-	lastCardPlayed := FreedomCard new.
 	self releaseFromJail: aPlayer.
+	"No se si tirar la validacion aca de si esta en la carcel"
+	lastCardPlayed := FreedomCard new.   
+	
 ]
 
 { #category : #action }
@@ -231,7 +238,9 @@ Board >> positionOf: aPlayer [
 
 { #category : #'as yet unclassified' }
 Board >> releaseFromJail: aPlayer [
-	jail remove: aPlayer.
+	(self isInJail: aPlayer)
+	ifTrue:[ jail remove: aPlayer]  
+	ifFalse:[ self error: self class playerNotInJailErrorMessage]. 
 ]
 
 { #category : #action }
