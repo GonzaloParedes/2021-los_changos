@@ -40,7 +40,7 @@ LudoMagicGameTest >> setUp [
 
 { #category : #'card usage tests' }
 LudoMagicGameTest >> test01JorgeGetsToJail [
-	| aGame squares aSpeedCard |
+	| aGame squares aSpeedCard  |
 	aSpeedCard := SpeedCard new.
 	squares := {EffectlessSquare new. EffectlessSquare new. JailSquare new. EffectlessSquare new. EffectlessSquare new}.
 	aGame := LudoMagicGame
