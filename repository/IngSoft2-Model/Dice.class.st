@@ -27,6 +27,11 @@ Dice class >> withFaces: numberOfFaces [.
 ]
 
 { #category : #initialize }
+Dice >> getMaxValue [
+	^numberOfFaces.
+]
+
+{ #category : #initialize }
 Dice >> initializeWithFaces: aNumberOfFaces [
 	numberOfFaces:= aNumberOfFaces .
 ]

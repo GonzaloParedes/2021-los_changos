@@ -86,7 +86,6 @@ Board >> addToAllEffectOf: aCard [
 { #category : #'as yet unclassified' }
 Board >> applyEffectOfReleasingFromJail: aPlayer [ 
 	self releaseFromJail: aPlayer.
-	"No se si tirar la validacion aca de si esta en la carcel"
 	lastCardPlayed := FreedomCard new.   
 	
 ]

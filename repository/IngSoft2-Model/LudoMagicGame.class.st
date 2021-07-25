@@ -110,6 +110,11 @@ LudoMagicGame >> finished [
 	^ finished.
 ]
 
+{ #category : #initialization }
+LudoMagicGame >> getMaxValueOf: aGroupOfDices [
+	^ (aGroupOfDices collect: [ :dice | dice getMaxValue ]) sum
+]
+
 { #category : #boolean }
 LudoMagicGame >> has: aPlayer the: aCard [ 
 	^ board has: aPlayer the: aCard
@@ -121,7 +126,7 @@ LudoMagicGame >> initializePlayedBy: players withNumberOf: laps throwing: aGroup
 	nextPlayerIndex := 2.
 	finished := false.
 	dices := aGroupOfDices.
-	maxDiceValue:= (aGroupOfDices collect:[:dice | dice getMaxValue])sum.
+	maxDiceValue := self getMaxValueOf: aGroupOfDices.
 	turnPlayer := players at: 1.
 	board := Board
 		playedBy: players
@@ -157,7 +162,6 @@ LudoMagicGame >> numberOfSquaresToMove [
 	finalResultWithEffects := finalResult + (board cardHandlerOf: turnPlayer) totalEffectsOnPlayer.
 	(board isInJail: turnPlayer)
 		ifTrue: [ ^ self validateIfRollIsTheMaximumValue: finalResult]
-			"Duda si sale con efectos o solo valor de tirada" 
 		ifFalse: [ ^ finalResultWithEffects ]
 ]
 
