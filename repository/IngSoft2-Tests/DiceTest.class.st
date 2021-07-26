@@ -32,12 +32,21 @@ DiceTest >> testADiceCannotBeCreatedWithNumberOfFacesIsZero [
 ]
 
 { #category : #tests }
-DiceTest >> testADiceWithNumberOfFacesRolls [
+DiceTest >> testADiceWithNumberOfFacesGetsMaxValue [
 	
 	| aDice aNumber |
 	aNumber:= 10.
 	aDice:= Dice withFaces: aNumber .
 	self assert: aDice getMaxValue equals:10. 
+]
+
+{ #category : #tests }
+DiceTest >> testADiceWithNumberOfFacesRolls [
+	
+	| aDice aNumber |
+	aNumber:= 10.
+	aDice:= Dice withFaces: aNumber .
+	self assert: (aDice roll between: 1  and: aNumber ). 
 ]
 
 { #category : #tests }
