@@ -106,13 +106,13 @@ LudoMagicGame >> applyEffectOfTheLastPlayedSquareTo: aPlayer from:aCard [
 ]
 
 { #category : #accessing }
-LudoMagicGame >> finished [
-	^ finished.
+LudoMagicGame >> effectsOnTurnPlayer [
+	^ (board cardHandlerOf: turnPlayer) totalEffectsOnPlayer
 ]
 
-{ #category : #initialization }
-LudoMagicGame >> getMaxValueOf: aGroupOfDices [
-	^ (aGroupOfDices collect: [ :dice | dice getMaxValue ]) sum
+{ #category : #accessing }
+LudoMagicGame >> finished [
+	^ finished.
 ]
 
 { #category : #boolean }
@@ -126,7 +126,7 @@ LudoMagicGame >> initializePlayedBy: players withNumberOf: laps throwing: aGroup
 	nextPlayerIndex := 2.
 	finished := false.
 	dices := aGroupOfDices.
-	maxDiceValue := self getMaxValueOf: aGroupOfDices.
+	maxDiceValue := self maxValueOf: aGroupOfDices.
 	turnPlayer := players at: 1.
 	board := Board
 		playedBy: players
@@ -150,6 +150,11 @@ LudoMagicGame >> lastCardPlayed [
 	^board lastCardPlayed.
 ]
 
+{ #category : #initialization }
+LudoMagicGame >> maxValueOf: aGroupOfDices [
+	^ (aGroupOfDices collect: [ :dice | dice getMaxValue ]) sum
+]
+
 { #category : #accessing }
 LudoMagicGame >> numberOfSquareOf: aPlayer [ 
 	^ (board positionOf: aPlayer) numberOfSquare 
@@ -159,9 +164,9 @@ LudoMagicGame >> numberOfSquareOf: aPlayer [
 LudoMagicGame >> numberOfSquaresToMove [
 	| finalResult finalResultWithEffects |
 	finalResult := self throwDices.
-	finalResultWithEffects := finalResult + (board cardHandlerOf: turnPlayer) totalEffectsOnPlayer.
+	finalResultWithEffects := finalResult + self effectsOnTurnPlayer.
 	(board isInJail: turnPlayer)
-		ifTrue: [ ^ self validateIfRollIsTheMaximumValue: finalResult]
+		ifTrue: [ ^ self validateIfRollIsTheMaximumValue: finalResult ]
 		ifFalse: [ ^ finalResultWithEffects ]
 ]
 
@@ -173,7 +178,7 @@ LudoMagicGame >> quantityOfCardInHandOf: aPlayer [
 { #category : #'as yet unclassified' }
 LudoMagicGame >> releaseFromJail: aPlayer [ 
 	board releaseFromJail: aPlayer.
-	^ maxDiceValue .
+	^ maxDiceValue + self effectsOnTurnPlayer .
 ]
 
 { #category : #action }

@@ -435,6 +435,25 @@ LudoMagicGameTest >> testJorgeGetsASpeedCardAndThrowItToJulian [
 ]
 
 { #category : #'card usage tests' }
+LudoMagicGameTest >> testJorgeGetsASpeedCardThenGetsToJailAndAfterHeGetsMaxValueOfDicesGetsOut [
+	| aGame squares aSpeedCard |
+	aSpeedCard := SpeedCard new.
+	squares := {EffectlessSquare new. JailSquare new. DeliveryCardSquare new. EffectlessSquare new. EffectlessSquare new}.
+	aGame := LudoMagicGame
+		playedBy: players
+		withNumberOfLaps: 4
+		throwing:
+			{(LoadedDice withValues: #(1 2 2)).
+			(LoadedDice withValues: #(1 3 1))}
+		andWithBoardOfSquares: squares
+		withDeckOf: (LoadedDeck withCards: {aSpeedCard}).
+	self do:2 theGame:aGame.
+	aGame affect:jorge  using:aSpeedCard  by:jorge. 
+	self do:3 theGame:aGame.
+	self assert: (aGame numberOfSquareOf: jorge) equals: 3.
+]
+
+{ #category : #'card usage tests' }
 LudoMagicGameTest >> testJorgeGetsAnAccelerationAndAffectsAllPlayers [
 	| aGame squares anAccelerationCard |
 	anAccelerationCard := AccelerationCard new.
