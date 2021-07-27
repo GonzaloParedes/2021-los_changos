@@ -544,9 +544,8 @@ LudoMagicGameTest >> testJorgeGetsToJailAndAfterHeGetsMaxValueOfDicesGetsOut [
 			(LoadedDice withValues: #(1 2 4))}
 		andWithBoardOfSquares: squares
 		withDeckOf: (LoadedDeck withCards: {aSpeedCard}).
-	aGame turn.
-	aGame turn.
-	aGame turn.
+	self do:3 theGame:aGame. 
+	
 	self assert: (aGame numberOfSquareOf: jorge) equals: 5.
 ]
 
@@ -563,11 +562,7 @@ LudoMagicGameTest >> testJorgeGetsToJailAndWhileHeIsInThereHeCannotMove [
 			(LoadedDice withValues: #(1 2 ))}
 		andWithBoardOfSquares: squares
 		withDeckOf: (LoadedDeck withCards: {aSpeedCard}).
-	aGame turn.
-	aGame turn.
-	aGame turn.
-	aGame turn.
-	aGame turn.
+	self do:5  theGame:aGame .
 	self assert: (aGame numberOfSquareOf: jorge) equals: 3.
 ]
 
