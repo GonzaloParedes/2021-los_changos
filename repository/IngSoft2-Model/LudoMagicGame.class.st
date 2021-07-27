@@ -94,7 +94,7 @@ LudoMagicGame >> affect: aTarget using: aCard by: aPlayer [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #action }
 LudoMagicGame >> applyEffectOfReleasingFromJail: aPlayer [ 
 	board applyEffectOfReleasingFromJail: aPlayer.
 ]
@@ -175,7 +175,7 @@ LudoMagicGame >> quantityOfCardInHandOf: aPlayer [
 	^ (board cardHandlerOf: aPlayer) quantityOfCardsInHand
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #action }
 LudoMagicGame >> releaseFromJail: aPlayer [ 
 	board releaseFromJail: aPlayer.
 	^ maxDiceValue + self effectsOnTurnPlayer .

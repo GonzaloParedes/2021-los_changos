@@ -83,7 +83,7 @@ Board >> addToAllEffectOf: aCard [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #action }
 Board >> applyEffectOfReleasingFromJail: aPlayer [ 
 	self releaseFromJail: aPlayer.
 	lastCardPlayed := FreedomCard new.   
@@ -149,7 +149,7 @@ Board >> initializePlayedBy: aGroupOfPlayers withNumberOf: numberOfLaps with: aG
 	lastSquarePlayed := EffectlessSquare new.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 Board >> isInJail: aPlayer [ 
 	^(jail includes: aPlayer)
 ]
@@ -235,7 +235,7 @@ Board >> positionOf: aPlayer [
 	^ positions detect: [ :aPosition | aPosition player = aPlayer  ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #action }
 Board >> releaseFromJail: aPlayer [
 	(self isInJail: aPlayer)
 	ifTrue:[ jail remove: aPlayer]  
@@ -266,7 +266,7 @@ Board >> restartPositionOfAllPlayers [
 			[ :player | Position of: player at: 1 after: (self lapOf: player) ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #action }
 Board >> sendToJail: aPlayer [ 
 	jail add: aPlayer.
 ]
